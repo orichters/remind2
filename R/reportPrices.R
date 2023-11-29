@@ -786,6 +786,20 @@ reportPrices <- function(gdx, output=NULL, regionSubsetList=NULL,
                                 "Price|Carbon|AggregatedByGrossCO2 (US$2005/t CO2)")) # AggregatedByEmiGHGGross
   }
 
+  tradePe <- readGDX(gdx, name = "tradePe")
+  p21_taxrevImport0 <- readGDX(gdx, name = "p21_taxrevImport0", format = "first_found", silent = TRUE)[, t, tradePe]
+  p_cintraw <- readGDX(gdx, name = "p_cintraw", format = "first_found")[,, tradePe]
+  vm_Mport <- readGDX(gdx, name = "vm_Mport", field = "l", format = "first_found")[, t, tradePe]
+  if (! is.null(v21_taxrevImport)) {
+    p21_taxrevImport_sum <- dimSums(p21_taxrevImport0, dim = 3)
+    co2imports <- dimSums(p_cintraw * vm_Mport, dim = 3)
+    taxperimport <- ifelse(p21_taxrevImport_sum == 0, 0, ifelse(co2imports == 0, NA, p21_taxrevImport_sum / co2imports * 1000 * 12/44))
+    if (any(is.na(taxperimport))) {
+      warning("Price|Carbon|Imported is partly NA as imports are 0 but income is non-zero")
+    }
+    out <- mbind(out, setNames(taxperimport, "Price|Carbon|Imported (US$2005/t CO2)"))
+  }
+
   #
   CaptureBal_tmp <- new.magpie(getRegions(out), getYears(out), fill = NA)
   CaptureBal_tmp[,getYears(balcapture.m),] <- balcapture.m
