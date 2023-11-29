@@ -796,7 +796,7 @@ reportPrices <- function(gdx, output=NULL, regionSubsetList=NULL,
       pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "worldPricemarkup"], dim = 3.2) * pm_pvp[,, tradePe] * dimSums(pm_pvp[,, "good"], dim = 3)
     }
     if ("c02taxmarkup" %in% tax_import_type_21) {
-      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "c02taxmarkup"], dim = 3.2) * pmax(0, pm_taxCO2eqSum - magpie_expand(colMeans(pm_taxCO2eqSum), pm_taxCO2eqSum)) * p_cintraw
+      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "c02taxmarkup"], dim = 3.2) * pm_taxCO2eqSum * p_cintraw
     }
     if ("avC02taxmarkup" %in% tax_import_type_21) {
       pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "avC02taxmarkup"], dim = 3.2) * pmax(pm_taxCO2eqSum, magpie_expand(colMeans(pm_taxCO2eqSum), pm_taxCO2eqSum)) * p_cintraw
