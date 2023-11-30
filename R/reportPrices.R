@@ -788,20 +788,23 @@ reportPrices <- function(gdx, output=NULL, regionSubsetList=NULL,
 
   tradePe <- readGDX(gdx, name = "tradePe")
   p_cintraw <- readGDX(gdx, name = "p_cintraw", format = "first_found")[,, tradePe]
-  p21_tau_Import <- readGDX(gdx, name = "p21_tau_Import", silent = TRUE)[, t, tradePe]
+  p21_tau_Import <- readGDX(gdx, name = "p21_tau_Import", silent = TRUE)[, t, c("peoil", "pegas", "pecoal")]
   tax_import_type_21 <- readGDX(gdx, name = "tax_import_type_21", silent = TRUE)
   if (! is.null(p21_tau_Import) && ! is.null(tax_import_type_21)) {
     pm_taxCO2eqMport <- 0
-    if ("worldPricemarkup" %in% tax_import_type_21) {
-      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "worldPricemarkup"], dim = 3.2) * pm_pvp[,, tradePe] * dimSums(pm_pvp[,, "good"], dim = 3)
-    }
+    # if ("worldPricemarkup" %in% tax_import_type_21) {
+    #  p_cintraw_inv <- 1/p_cintraw
+    #  p_cintraw_inv[p_cintraw_inv == Inf] <- 0
+    #  pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "worldPricemarkup"], dim = 3.2) * pm_pvp[,, tradePe] * dimSums(pm_pvp[,, "good"], dim = 3) * p_cintraw_inv
+    #  pm_taxCO2eqMport <- dimSums(pm_taxCO2eqMport, dim = 3)
+    #}
     if ("c02taxmarkup" %in% tax_import_type_21) {
-      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "c02taxmarkup"], dim = 3.2) * pm_taxCO2eqSum * p_cintraw
+      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,,"c02taxmarkup"], dim = 3)/3 * pm_taxCO2eqSum
     }
     if ("avC02taxmarkup" %in% tax_import_type_21) {
-      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "avC02taxmarkup"], dim = 3.2) * pmax(pm_taxCO2eqSum, magpie_expand(colMeans(pm_taxCO2eqSum), pm_taxCO2eqSum)) * p_cintraw
+      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "avC02taxmarkup"], dim = 3)/3 * pmax(pm_taxCO2eqSum, magpie_expand(colMeans(pm_taxCO2eqSum), pm_taxCO2eqSum))
     }
-    pm_taxCO2eqMport <- dimSums(pm_taxCO2eqMport, dim = 3) * 1000 * 12/44
+    pm_taxCO2eqMport <- pm_taxCO2eqMport * 1000 * 12/44 # problem: oil, gas,  now only uses oil
     out <- mbind(out, setNames(pm_taxCO2eqMport, "Price|Carbon|Imported (US$2005/t CO2)"))
   }
 
