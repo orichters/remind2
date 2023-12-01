@@ -786,26 +786,23 @@ reportPrices <- function(gdx, output=NULL, regionSubsetList=NULL,
                                 "Price|Carbon|AggregatedByGrossCO2 (US$2005/t CO2)")) # AggregatedByEmiGHGGross
   }
 
-  tradePe <- readGDX(gdx, name = "tradePe")
-  p_cintraw <- readGDX(gdx, name = "p_cintraw", format = "first_found")[,, tradePe]
-  p21_tau_Import <- readGDX(gdx, name = "p21_tau_Import", silent = TRUE)[, t, c("peoil", "pegas", "pecoal")]
+  tradeFossil <- c("pecoal", "pegas", "peoil")
+  p21_tau_Import <- readGDX(gdx, name = "p21_tau_Import", silent = TRUE)[, t, tradeFossil]
   tax_import_type_21 <- readGDX(gdx, name = "tax_import_type_21", silent = TRUE)
   if (! is.null(p21_tau_Import) && ! is.null(tax_import_type_21)) {
     pm_taxCO2eqMport <- 0
-    # if ("worldPricemarkup" %in% tax_import_type_21) {
-    #  p_cintraw_inv <- 1/p_cintraw
-    #  p_cintraw_inv[p_cintraw_inv == Inf] <- 0
-    #  pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "worldPricemarkup"], dim = 3.2) * pm_pvp[,, tradePe] * dimSums(pm_pvp[,, "good"], dim = 3) * p_cintraw_inv
-    #  pm_taxCO2eqMport <- dimSums(pm_taxCO2eqMport, dim = 3)
-    #}
     if ("c02taxmarkup" %in% tax_import_type_21) {
-      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,,"c02taxmarkup"], dim = 3)/3 * pm_taxCO2eqSum
+      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,,"c02taxmarkup"], dim = 3.2) * pm_taxCO2eqSum
     }
     if ("avC02taxmarkup" %in% tax_import_type_21) {
-      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "avC02taxmarkup"], dim = 3)/3 * pmax(pm_taxCO2eqSum, magpie_expand(colMeans(pm_taxCO2eqSum), pm_taxCO2eqSum))
+      pm_taxCO2eqMport <- pm_taxCO2eqMport + dimSums(p21_tau_Import[,, "avC02taxmarkup"], dim = 3.2) * pmax(pm_taxCO2eqSum, magpie_expand(colMeans(pm_taxCO2eqSum), pm_taxCO2eqSum))
     }
-    pm_taxCO2eqMport <- pm_taxCO2eqMport * 1000 * 12/44 # problem: oil, gas,  now only uses oil
-    out <- mbind(out, setNames(pm_taxCO2eqMport, "Price|Carbon|Imported (US$2005/t CO2)"))
+    pm_taxCO2eqMport <- pm_taxCO2eqMport * 1000 * 12/44
+    out <- mbind(out, setNames(pm_taxCO2eqMport[,, "pecoal"], "Price|Carbon|Imported|Coal (US$2005/t CO2)"))
+    out <- mbind(out, setNames(pm_taxCO2eqMport[,, "pegas" ], "Price|Carbon|Imported|Gas (US$2005/t CO2)"))
+    out <- mbind(out, setNames(pm_taxCO2eqMport[,, "peoil" ], "Price|Carbon|Imported|Oil (US$2005/t CO2)"))
+    # use unweighted average, because weighing according to import volumes might lead to big jumps
+    out <- mbind(out, setNames(dimSums(pm_taxCO2eqMport, dim = 3.1)/3, "Price|Carbon|Imported (US$2005/t CO2)"))
   }
 
   #
