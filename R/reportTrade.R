@@ -56,7 +56,8 @@ reportTrade <- function(gdx,regionSubsetList=NULL,t=c(seq(2005,2060,5),seq(2070,
   trade     <- Xport - Mport
   trade_net <- Xport - (1-p_costsPEtradeMp) * Mport
   # in case of numerical errors leading to trade_net being negative (imports > exports), rescale
-  trade_net <- trade_net - pmin(dimSums(trade_net, dim = 1), 0)/length(getRegions(trade_net))
+  # trade_net <- trade_net - pmin(dimSums(trade_net, dim = 1), 0)/length(getRegions(trade_net))
+  trade_net <- trade_net - ifelse(trade_net < 0, pmin(dimSums(trade_net, dim = 1), 0)/dimSums(trade_net < 0, dim = 1), 0)
   price     <- pm_pvp / setNames(pm_pvp[,,"good"],NULL) #so in TeraDollar per either TWyr (pecoal,pegas,peoil,pebiolc), Gt C (perm), and Mt Uran (peUr) respectively
 
   # build reporting
