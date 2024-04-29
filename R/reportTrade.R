@@ -60,54 +60,54 @@ reportTrade <- function(gdx,regionSubsetList=NULL,t=c(seq(2005,2060,5),seq(2070,
   # build reporting
   tmp <- NULL
   tmp <- mbind(tmp,setNames(trade_net[,,"pecoal"] * TWa_2_EJ,                                "Trade|Coal (EJ/yr)"))
-  tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"pecoal"]) * Mport[,,"pecoal"] * TWa_2_EJ, "Trade|Imports|Coal (EJ/yr)"))
+  tmp <- mbind(tmp,setNames((Xport[,,"pecoal"] - trade_net[,,"pecoal"]) * TWa_2_EJ,          "Trade|Imports|Coal (EJ/yr)"))
   tmp <- mbind(tmp,setNames(Xport[,,"pecoal"] * TWa_2_EJ,                                    "Trade|Exports|Coal (EJ/yr)"))
   tmp <- mbind(tmp,setNames(trade_net[,,"pegas"] * TWa_2_EJ,                                 "Trade|Gas (EJ/yr)"))
-  tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"pegas"]) * Mport[,,"pegas"] * TWa_2_EJ,   "Trade|Imports|Gas (EJ/yr)"))
+  tmp <- mbind(tmp,setNames((Xport[,,"pegas"] - trade_net[,,"pegas"]) * TWa_2_EJ,            "Trade|Imports|Gas (EJ/yr)"))
   tmp <- mbind(tmp,setNames(Xport[,,"pegas"] * TWa_2_EJ,                                     "Trade|Exports|Gas (EJ/yr)"))
   tmp <- mbind(tmp,setNames(trade_net[,,"peoil"] * TWa_2_EJ,                                 "Trade|Oil (EJ/yr)"))
-  tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"peoil"]) * Mport[,,"peoil"] * TWa_2_EJ,   "Trade|Imports|Oil (EJ/yr)"))
+  tmp <- mbind(tmp,setNames((Xport[,,"peoil"] - trade_net[,,"peoil"]) * TWa_2_EJ,            "Trade|Imports|Oil (EJ/yr)"))
   tmp <- mbind(tmp,setNames(Xport[,,"peoil"] * TWa_2_EJ,                                     "Trade|Exports|Oil (EJ/yr)"))
 
   tmp <- mbind(tmp,setNames(trade_net[,,"peur"] * 1000,                                      "Trade|Uranium|Mass (ktU/yr)"))
   tmp <- mbind(tmp,setNames(trade_net[,,"peur"] * p_eta_conv[,,"tnrs"] * TWa_2_EJ,           "Trade|Uranium|seelEquivalent (EJ/yr)"))
-  tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"peur"]) * Mport[,,"peur"] * p_eta_conv[,,"tnrs"] * TWa_2_EJ, "Trade|Imports|Uranium (ktU/yr)"))
+  tmp <- mbind(tmp,setNames((Xport[,,"peur"] - trade_net[,,"peur"]) * p_eta_conv[,,"tnrs"] * TWa_2_EJ, "Trade|Imports|Uranium (ktU/yr)"))
   tmp <- mbind(tmp,setNames(Xport[,,"peur"] * p_eta_conv[,,"tnrs"] * TWa_2_EJ,               "Trade|Exports|Uranium (ktU/yr)"))
 
-  tmp <- mbind(tmp,setNames(trade_net[,,"good"] * 1000,                                       "Trade|Goods (billion US$2005/yr)"))
-  tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"good"]) * Mport[,,"good"] * 1000,          "Trade|Imports|Goods (billion US$2005/yr)"))
-  tmp <- mbind(tmp,setNames(Xport[,,"good"] * 1000,                                           "Trade|Exports|Goods (billion US$2005/yr)"))
+  tmp <- mbind(tmp,setNames(trade_net[,,"good"] * 1000,                                      "Trade|Goods (billion US$2005/yr)"))
+  tmp <- mbind(tmp,setNames((Xport[,,"good"] - trade_net[,,"good"]) * 1000,                  "Trade|Imports|Goods (billion US$2005/yr)"))
+  tmp <- mbind(tmp,setNames(Xport[,,"good"] * 1000,                                          "Trade|Exports|Goods (billion US$2005/yr)"))
 
-  tmp <- mbind(tmp,setNames(trade_net[,,"pebiolc"] * TWa_2_EJ,                                "Trade|Biomass (EJ/yr)") )
-  tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"pebiolc"]) * Mport[,,"pebiolc"] * TWa_2_EJ,"Trade|Imports|Biomass (EJ/yr)") )
+  tmp <- mbind(tmp,setNames(trade_net[,,"pebiolc"] * TWa_2_EJ,                                "Trade|Biomass (EJ/yr)"))
+  tmp <- mbind(tmp,setNames((Xport[,,"pebiolc"] - trade_net[,,"pebiolc"]) * TWa_2_EJ,         "Trade|Imports|Biomass (EJ/yr)"))
   tmp <- mbind(tmp,setNames(Xport[,,"pebiolc"]  * TWa_2_EJ,                                   "Trade|Exports|Biomass (EJ/yr)"))
 
   tmp <- mbind(tmp,setNames(trade_net[,,"perm"] * 44 / 12 * 1000,                             "Trade|Emi Allowances|Volume (Mt CO2-equiv/yr)"))
-  tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"perm"]) * Mport[,,"perm"] * 44 / 12 * 1000,"Trade|Imports|Emi Allowances|Volume (Mt CO2-equiv/yr)"))
-  tmp <- mbind(tmp,setNames(Xport[,,"perm"] * 44 / 12 * 1000,                                "Trade|Exports|Emi Allowances|Volume (Mt CO2-equiv/yr)"))
+  tmp <- mbind(tmp,setNames((Xport[,,"perm"] - trade_net[,,"perm"]) * 44 / 12 * 1000,         "Trade|Imports|Emi Allowances|Volume (Mt CO2-equiv/yr)"))
+  tmp <- mbind(tmp,setNames(Xport[,,"perm"] * 44 / 12 * 1000,                                 "Trade|Exports|Emi Allowances|Volume (Mt CO2-equiv/yr)"))
 
   # SE Trade
   if (module2realisation["trade",2] == "se_trade") {
 
     tmp <- mbind(tmp,setNames(trade_net[,,"seh2"] * TWa_2_EJ,                                "Trade|SE|Hydrogen (EJ/yr)"))
     # for now p_costsPEtradeMp is zero for SE trade, adapt once SE trade transport cost implemented
-    tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"seh2"]) * Mport[,,"seh2"] * TWa_2_EJ, "Trade|Imports|SE|Hydrogen (EJ/yr)"))
+    tmp <- mbind(tmp,setNames((Xport[,,"seh2"] - net_trade[,,"seh2"]) * TWa_2_EJ,            "Trade|Imports|SE|Hydrogen (EJ/yr)"))
     tmp <- mbind(tmp,setNames(Xport[,,"seh2"] * TWa_2_EJ,                                    "Trade|Exports|SE|Hydrogen (EJ/yr)"))
 
     tmp <- mbind(tmp,setNames(trade_net[,,"seel"] * TWa_2_EJ,                                "Trade|SE|Electricity (EJ/yr)"))
     # for now p_costsPEtradeMp is zero for SE trade, adapt once SE trade transport cost implemented
-    tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"seel"]) * Mport[,,"seel"] * TWa_2_EJ, "Trade|Imports|SE|Electricity (EJ/yr)"))
+    tmp <- mbind(tmp,setNames((Xport[,,"seel"] - trade_net[,,"seel"]) * TWa_2_EJ,            "Trade|Imports|SE|Electricity (EJ/yr)"))
     tmp <- mbind(tmp,setNames(Xport[,,"seel"] * TWa_2_EJ,                                    "Trade|Exports|SE|Electricity (EJ/yr)"))
 
-    tmp <- mbind(tmp,setNames(trade_net[,,"seliqsyn"] * TWa_2_EJ,                                "Trade|SE|Liquids|Hydrogen (EJ/yr)"))
+    tmp <- mbind(tmp,setNames(trade_net[,,"seliqsyn"] * TWa_2_EJ,                            "Trade|SE|Liquids|Hydrogen (EJ/yr)"))
     # for now p_costsPEtradeMp is zero for SE trade, adapt once SE trade transport cost implemented
-    tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"seliqsyn"]) * Mport[,,"seliqsyn"] * TWa_2_EJ, "Trade|Imports|SE|Liquids|Hydrogen (EJ/yr)"))
-    tmp <- mbind(tmp,setNames(Xport[,,"seliqsyn"] * TWa_2_EJ,                                    "Trade|Exports|SE|Liquids|Hydrogen (EJ/yr)"))
+    tmp <- mbind(tmp,setNames((Xport[,,"seliqsyn"] - trade_net[,,"seliqsyn"]) * TWa_2_EJ,    "Trade|Imports|SE|Liquids|Hydrogen (EJ/yr)"))
+    tmp <- mbind(tmp,setNames(Xport[,,"seliqsyn"] * TWa_2_EJ,                                "Trade|Exports|SE|Liquids|Hydrogen (EJ/yr)"))
 
-    tmp <- mbind(tmp,setNames(trade_net[,,"segasyn"] * TWa_2_EJ,                                "Trade|SE|Gases|Hydrogen (EJ/yr)"))
+    tmp <- mbind(tmp,setNames(trade_net[,,"segasyn"] * TWa_2_EJ,                             "Trade|SE|Gases|Hydrogen (EJ/yr)"))
     # for now p_costsPEtradeMp is zero for SE trade, adapt once SE trade transport cost implemented
-    tmp <- mbind(tmp,setNames((1-p_costsPEtradeMp[,,"segasyn"]) * Mport[,,"segasyn"] * TWa_2_EJ, "Trade|Imports|SE|Gases|Hydrogen (EJ/yr)"))
-    tmp <- mbind(tmp,setNames(Xport[,,"segasyn"] * TWa_2_EJ,                                    "Trade|Exports|SE|Gases|Hydrogen (EJ/yr)"))
+    tmp <- mbind(tmp,setNames((Xport[,,"segasyn"] - trade_net[,,"segasyn"]) * TWa_2_EJ,      "Trade|Imports|SE|Gases|Hydrogen (EJ/yr)"))
+    tmp <- mbind(tmp,setNames(Xport[,,"segasyn"] * TWa_2_EJ,                                 "Trade|Exports|SE|Gases|Hydrogen (EJ/yr)"))
 
 
 
