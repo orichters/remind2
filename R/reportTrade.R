@@ -54,7 +54,9 @@ reportTrade <- function(gdx,regionSubsetList=NULL,t=c(seq(2005,2060,5),seq(2070,
 
   # calculate variables
   trade     <- Xport - Mport
-  trade_net <- pmax(Xport - (1-p_costsPEtradeMp) * Mport, 0)
+  trade_net <- Xport - (1-p_costsPEtradeMp) * Mport
+  # in case of numerical errors leading to trade_net being negative (imports > exports), rescale
+  trade_net <- trade_net - pmin(dimSums(trade_net, dim = 1), 0)/length(getRegions(trade_net))
   price     <- pm_pvp / setNames(pm_pvp[,,"good"],NULL) #so in TeraDollar per either TWyr (pecoal,pegas,peoil,pebiolc), Gt C (perm), and Mt Uran (peUr) respectively
 
   # build reporting
@@ -91,7 +93,7 @@ reportTrade <- function(gdx,regionSubsetList=NULL,t=c(seq(2005,2060,5),seq(2070,
 
     tmp <- mbind(tmp,setNames(trade_net[,,"seh2"] * TWa_2_EJ,                                "Trade|SE|Hydrogen (EJ/yr)"))
     # for now p_costsPEtradeMp is zero for SE trade, adapt once SE trade transport cost implemented
-    tmp <- mbind(tmp,setNames((Xport[,,"seh2"] - net_trade[,,"seh2"]) * TWa_2_EJ,            "Trade|Imports|SE|Hydrogen (EJ/yr)"))
+    tmp <- mbind(tmp,setNames((Xport[,,"seh2"] - trade_net[,,"seh2"]) * TWa_2_EJ,            "Trade|Imports|SE|Hydrogen (EJ/yr)"))
     tmp <- mbind(tmp,setNames(Xport[,,"seh2"] * TWa_2_EJ,                                    "Trade|Exports|SE|Hydrogen (EJ/yr)"))
 
     tmp <- mbind(tmp,setNames(trade_net[,,"seel"] * TWa_2_EJ,                                "Trade|SE|Electricity (EJ/yr)"))
