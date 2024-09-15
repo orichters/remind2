@@ -163,6 +163,9 @@ data <-
 data <- data %>%
   mutate(variable = gsub("|Elec|", "|Electricity|", .data$variable, fixed = TRUE))
 
+# remove WEO 2021 data for variables for which WEO 2023 is available
+WEO2023vars <- filter(data, .data$scenario == "historical", grepl("WEO 2023", .data$model)) %>% pull("variable") %>% unique()
+data <- filter(data, ! .data$variable %in% WEO2023vars | ! grepl("WEO 2021", .data$model))
 
 # remove preprocessing objects not to be used anymore ----
 varNames <- c(
