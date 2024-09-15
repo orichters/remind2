@@ -37,13 +37,13 @@ items <- c(
   "Emi|CO2|CDR|DACCS",
   "Emi|CO2|CDR|OAE",
   "Emi|CO2|CDR|EW")
-showAreaAndBarPlots(data, items, tot, scales = "fixed")
+showAreaAndBarPlots(data, items, tot, scales = "fixed", orderVars = "user")
 ```
 
 ### GHG pCap by sector
 
 ```{r GHG pCap by sector}
-showAreaAndBarPlots(data, paste(items, "pCap"), paste(tot, "pCap"), scales = "fixed")
+showAreaAndBarPlots(data, paste(items, "pCap"), paste(tot, "pCap"), scales = "fixed", orderVars = "user")
 ```
 
 ## CO2 by sector
@@ -64,13 +64,13 @@ items <- c(
   "Emi|CO2|CDR|DACCS",
   "Emi|CO2|CDR|OAE",
   "Emi|CO2|CDR|EW")
-showAreaAndBarPlots(data, items, tot, scales = "fixed")
+showAreaAndBarPlots(data, items, tot, scales = "fixed", orderVars = "user")
 ```
 
 ###  CO2 pCap by sector
 
 ```{r CO2 pCap by sector}
-showAreaAndBarPlots(data, paste(items, "pCap"), paste(tot, "pCap"), scales = "fixed")
+showAreaAndBarPlots(data, paste(items, "pCap"), paste(tot, "pCap"), scales = "fixed", orderVars = "user")
 ```
 
 
@@ -92,7 +92,7 @@ items <- c(
   "Emi|CO2|Cumulated|CDR|DACCS",
   "Emi|CO2|Cumulated|CDR|OAE",
   "Emi|CO2|Cumulated|CDR|EW")
-showAreaAndBarPlots(data, items, tot, scales = "fixed")
+showAreaAndBarPlots(data, items, tot, scales = "fixed", orderVars = "user")
 ```
 
 

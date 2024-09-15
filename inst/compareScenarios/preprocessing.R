@@ -72,6 +72,7 @@ pCapVariables <- tribble(
   "Emi|GHG|Gross|Energy|Supply|Non-electric", "t CO2eq/yr/pCap", 1e6,
   "Emi|GHG|Energy|Demand|Transport", "t CO2eq/yr/pCap", 1e6,
   "Emi|GHG|Energy|Demand|Buildings", "t CO2eq/yr/pCap", 1e6,
+  "Emi|GHG|Energy|Demand|CDR", "t CO2eq/yr/pCap", 1e6,
   "Emi|GHG|Gross|Energy|Demand|Industry", "t CO2eq/yr/pCap", 1e6,
   "Emi|GHG|Industrial Processes", "t CO2eq/yr/pCap", 1e6,
   "Emi|GHG|Agriculture", "t CO2eq/yr/pCap", 1e6,
@@ -88,6 +89,7 @@ pCapVariables <- tribble(
   "Emi|CO2|Energy|Demand|Transport", "t CO2eq/yr/pCap", 1e6,
   "Emi|CO2|Gross|Energy|Demand|Industry", "t CO2eq/yr/pCap", 1e6,
   "Emi|CO2|Energy|Demand|Buildings", "t CO2eq/yr/pCap", 1e6,
+  "Emi|CO2|Energy|Demand|CDR", "t CO2eq/yr/pCap", 1e6,
   "Emi|CO2|Gross|Energy|Supply|Non-electric", "t CO2eq/yr/pCap", 1e6,
   "Emi|CO2|Gross|Energy|Supply|Electricity", "t CO2eq/yr/pCap", 1e6)
 
