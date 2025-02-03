@@ -42,7 +42,7 @@ Description: Contains the REMIND-specific routines for data and model
 License: LGPL-3
 URL: https://github.com/pik-piam/remind2
 Depends:
-    magclass (>= 6.16.1)
+    magclass (>= 6.17.2)
 Imports:
     abind,
     assertr,
